@@ -5,8 +5,7 @@ My code is based on my mini-project 2 here is the link: [GitLab Repository](http
 For this project I use the AWS DynamoDB instead of the S3 bucket.
 
 ## Links
-- [Deployed Lambda Function on AWS](https://lo0x2o7xri.execute-api.us-east-2.amazonaws.com/pricefilter_db)
-<br>
+- [Deployed Lambda Function on AWS](https://lo0x2o7xri.execute-api.us-east-2.amazonaws.com/pricefilter_db)<br>
     If use the url without any parameters, it will default low = 0 and high = 10000, which means will show all data.
     If you need to use other parameters, please assign values to variable, for example:
     <br>
