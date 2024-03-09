@@ -18,6 +18,9 @@ struct Record {
 }
 
 async fn query_dynamodb_data(event: Request) -> Result<Response<Body>, Box<dyn Error>> {
+    // logging
+    tracing::info!("Rust function invoked");
+
     let query_params = event.query_string_parameters_ref();
 
     let low_price = match query_params.and_then(|params| params.first("low")) {
@@ -29,6 +32,9 @@ async fn query_dynamodb_data(event: Request) -> Result<Response<Body>, Box<dyn E
         Some(value) => value.parse::<f64>().map_err(|_| "Invalid 'high' parameter. Must be a floating-point number.")?,
         None => 10000.0,
     };
+
+    // logging
+    tracing::info!({ %low_price, %high_price }, "Get data whose price range");
 
     let dynamodb_client = DynamoDbClient::new(Region::UsEast2);
 
@@ -79,18 +85,33 @@ async fn query_dynamodb_data(event: Request) -> Result<Response<Body>, Box<dyn E
     }).collect();
 
     let response_body = serde_json::to_string(&records)?;
+    // logging
+    tracing::info!("Rust function complete and output result in Json format");
     Ok(Response::new(response_body.into()))
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
-    tracing_subscriber::fmt()
-        .with_env_filter(
-            EnvFilter::builder()
-                .with_default_directive(LevelFilter::INFO.into())
-                .from_env_lossy(),
-        )
+    // tracing_subscriber::fmt()
+    //     .with_env_filter(
+    //         EnvFilter::builder()
+    //             .with_default_directive(LevelFilter::INFO.into())
+    //             .from_env_lossy(),
+    //     )
+    //     .with_target(false)
+    //     .without_time()
+    //     .init();
+
+    tracing_subscriber::fmt().json()
+        .with_max_level(tracing::Level::INFO)
+        // this needs to be set to remove duplicated information in the log.
+        .with_current_span(false)
+        // this needs to be set to false, otherwise ANSI color codes will
+        // show up in a confusing manner in CloudWatch logs.
+        // .with_ansi(false)
+        // remove the name of the function from every log entry
         .with_target(false)
+        // disabling time is handy because CloudWatch will add the ingestion time.
         .without_time()
         .init();
 

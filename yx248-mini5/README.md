@@ -21,69 +21,69 @@ Before you begin, ensure you have `Rust`, `brew`, and `Cargo Lambda` installed o
 1. **Download and Install Rust**
 Download the Rust installer: Rust provides an installation script that can be downloaded and executed with a single command. Run the following in your terminal:
 
-    ``` bash
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    ```
+``` bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
 
 2. **Configure Environment**
 Configure your environment: Once the installation is complete, the script will advise you to add the Rust compiler to your PATH. You can do this by running the following command:
 
-    ``` bash
-        source $HOME/.cargo/env
-    ```
+```bash
+source $HOME/.cargo/env
+```
 
 3. **Verify Installation**
 Verify the installation: After installation, you can verify that Rust is correctly installed by typing:
 
-    ``` bash
-        rustc --version
-    ```
+```bash
+rustc --version
+```
 
 ### Homebrew Installation
 1. **Install Dependencies**
 Install Dependencies: Before installing Homebrew, you need to install some dependencies. Run the following command:
 
-    ``` bash
-        sudo apt-get update && sudo apt-get install build-essential curl file git
-    ```
+```bash
+sudo apt-get update && sudo apt-get install build-essential curl file git
+```
 
 2. **Install Homebrew**
 Install Homebrew: Run the following command to install Homebrew:
 
-    ``` bash
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    ```
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
 
 This command downloads and runs the Homebrew installation script.
 
 3. **Add Homebrew to PATH**
 Add Homebrew to your PATH: After the installation script is finished, follow the instructions provided in the terminal to add Homebrew to your system's PATH. This typically involves adding some lines to your `.bashrc`, `.zshrc`, or other profile script. For example, you might need to add the following lines to your `~/.bashrc` or `~/.profile` file:
 
-    ``` bash
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/$USER/.profile
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    ```
+```bash
+echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/$USER/.profile
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+```
 
 After adding these lines, you should apply the changes by running:
 
-    ``` bash
-        source ~/.profile
-    ```
+```bash
+source ~/.profile
+```
 
 4. **Verify Installation**
 Verify the Installation: To verify that Homebrew has been installed correctly, run:
 
-    ``` bash
-        brew --version
-    ```
+```bash
+brew --version
+```
 
 ### Cargo Lambda Installation
 - You can use Homebrew to install Cargo Lambda on macOS and Linux. Run the following commands on your terminal to add our tap, and install it:
 
-    ``` bash
-        brew tap cargo-lambda/cargo-lambda
-        brew install cargo-lambda
-    ```
+```bash
+brew tap cargo-lambda/cargo-lambda
+brew install cargo-lambda
+```
 
 
 ## Creating and Testing the Project
@@ -91,54 +91,54 @@ Verify the Installation: To verify that Homebrew has been installed correctly, r
 ### Create a New Project
 The new subcommand will help you create a new project with a default template. When that's done, change into the new directory:
 
-    ``` bash
-        cargo lambda new new-lambda-project && cd new-lambda-project
-    ```
+```bash
+cargo lambda new new-lambda-project && cd new-lambda-project
+```
 
 ### Project Structure:
 We will get the project structure looks like:
 
-    ``` bash
-        root
-        │
-        ├── src
-        │ └── main.rs
-        │
-        ├── target
-        │ └── ...
-        │
-        ├── Cargo.lock
-        │
-        ├── Cargo.toml
-        │
-        └── .gitignore
-    ```
+```bash
+root
+│
+├── src
+│ └── main.rs
+│
+├── target
+│ └── ...
+│
+├── Cargo.lock
+│
+├── Cargo.toml
+│
+└── .gitignore
+```
 
 If we need to add some src or modify some funxtion code, we can go into `src` folder to modify the `main.rs` file or add more addition code file or lib folder and files to meet demand.
 
 ### Serve the function locally for testing
 Run the Lambda emulator built in with the watch subcommand:
 
-    ``` bash
-        cargo lambda watch
-    ```
+```bash
+cargo lambda watch
+```
 
 ### Test your function
 - The invoke subcommand can send JSON payloads to the function running locally. Payloads are deserialized into strongly typed Rust structs, and the invoke call will fail if the payload doesn't have the right shape.
 
 - If you're starting with a basic function that only receives events with a `command` field in the payload, you can invoke them with the following command:
 
-    ``` bash
-        cargo lambda invoke --data-ascii "{ \"command\": \"hi\" }"
-    ```
+```bash
+cargo lambda invoke --data-ascii "{ \"command\": \"hi\" }"
+```
 
 - If you're starting an HTTP function, you can access it with your browser from the local endpoint: `http://localhost:9000/`. You can also `invoke` HTTP functions with the invoke subcommand, the payload to send will depend if this function receives calls from Amazon API Gateway, Amazon Elastic Load Balancer, or Lambda Function URLs.
 
 - If your function integrates with Amazon API Gateway, you can use one of the payload examples that we provide by using the `--data-example` flag:
 
-    ``` bash
-        cargo lambda invoke http-lambda --data-example apigw-request
-    ```
+```bash
+cargo lambda invoke http-lambda --data-example apigw-request
+```
 
 ### My simple function
 
@@ -162,7 +162,7 @@ Get two boundary `high` and `low` to quary data in the range, and return back a 
 - Add `dependencies` in your `Cargo.toml` config file: `rusoto_core` and `rusoto_dynamodb`.
 - Import these code in your code files:
 
-``` rust
+```rust
 use rusoto_core::Region;
 use rusoto_dynamodb::DynamoDbClient;
 
@@ -179,20 +179,20 @@ Create an acess key and get your access key and your secret access key.
 ### Build the function to deploy it on AWS Lambda
 Use the build subcommand to compile your function for Linux systems:
 
-    ``` bash
-        cargo lambda build --release
-    ```
+```bash
+cargo lambda build --release
+```
 
 ### Deploy the function on AWS Lambda
 Use the deploy subcommand to upload your function to AWS Lambda. This subcommand requires AWS credentials in your system.
 
-    ``` bash
-        cargo lambda deploy
-    ```
+```bash
+cargo lambda deploy
+```
 
 - INFO: A default execution role for this function will be created when you execute this command. Use the flag --iam-role if you want to use a predefined IAM role. If you get the error about the role creation, check the error message and add the flag in the error message in your deploy command and try it again.
 
-- ![role_permissions.png](images/role_permissions.png.png)
+- ![role_permissions.png](images/role_permissions.png)
 - ![AWS_Lambda_Page](images/AWS_Lambda_Page.png)
 
 
