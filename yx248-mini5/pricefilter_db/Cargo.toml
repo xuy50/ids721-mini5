@@ -19,7 +19,7 @@ lambda_http = "0.9.2"
 lambda_runtime = "0.9.1"
 tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
-tracing-subscriber = { version = "0.3", default-features = false, features = ["env-filter", "fmt"] }
+tracing-subscriber = { version = "0.3", default-features = false, features = ["env-filter", "fmt", "json"] }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 # Adding rusoto_core and rusoto_dynamodb for DynamoDB interaction
